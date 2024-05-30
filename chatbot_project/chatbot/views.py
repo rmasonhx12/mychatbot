@@ -13,13 +13,17 @@ ai_client = OpenAI(api_key=os.environ["OPENAI_API_KEY"])
 @csrf_exempt
 def chatbot_response(request):
     if request.method == 'POST':
+        print(request.body, 'api called') # added 
         data = json.loads(request.body)
         user_message = data['message']
 
+ # Add context to the user message to focus on music, musicians, classical music, and cello
+        filtered_message = f"Answer the following question focusing only on music, musicians, classical music, and the cello: {user_message}"
 
         messages = [
-            {"role": "user", "content": user_message}
+            {"role": "user", "content": filtered_message},
         ]
+     
 
         chat_completion = ai_client.chat.completions.create(
             messages=messages,
